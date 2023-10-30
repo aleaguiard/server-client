@@ -1,0 +1,70 @@
+package cliente;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+public class SocketClienteHilo {
+
+    public static final int PUERTO = 2017;
+    public static final String IP_SERVER = "localhost";
+
+    public static void main(String[] args) {
+
+        InetSocketAddress direccionServidor = new InetSocketAddress(IP_SERVER, PUERTO);
+
+        try (Scanner sc = new Scanner(System.in)) {
+
+            boolean continuar = true;
+
+            do {
+                PrintStream salida = new PrintStream(System.out);
+
+				Menu.mostrarMenu(salida);
+
+                String opcion = sc.nextLine();
+
+                Socket socketAlServidor = new Socket();
+                socketAlServidor.connect(direccionServidor);
+                System.out.println("CLIENTE: Esperando a que el servidor acepte la conexión");
+                System.out.println("CLIENTE: Conexión establecida... a " + IP_SERVER
+                        + " por el puerto " + PUERTO);
+
+                // Enviar la opción al servidor
+                PrintStream salidaServidor = new PrintStream(socketAlServidor.getOutputStream());
+                salidaServidor.println(opcion);
+
+                System.out.println("CLIENTE: Esperando al resultado del servidor...");
+                InputStreamReader entrada = new InputStreamReader(socketAlServidor.getInputStream());
+                BufferedReader bf = new BufferedReader(entrada);
+                String resultado = bf.readLine();
+                System.out.println("CLIENTE: El resultado de la operación es: " + resultado);
+
+                System.out.println("CLIENTE: ¿Quiere continuar? S/N");
+                String sContinuar = sc.nextLine();
+                if (sContinuar.equalsIgnoreCase("n")) {
+                    continuar = false;
+                }
+
+                socketAlServidor.close();
+            } while (continuar);
+        } catch (UnknownHostException e) {
+            System.err.println("CLIENTE: No encuentro el servidor en la dirección " + IP_SERVER);
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("CLIENTE: Error de entrada/salida");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("CLIENTE: Error -> " + e);
+            e.printStackTrace();
+        }
+
+        System.out.println("CLIENTE: Fin del programa");
+    }
+}
+

@@ -5,56 +5,55 @@ import java.util.List;
 
 public class GestorPeliculas {
 
-    private List<Pelicula> listaPeliculas;
+	private List<Pelicula> listaPeliculas;
 
-    public GestorPeliculas() {
-        listaPeliculas = new ArrayList<>();
-        
-        listaPeliculas.add(new Pelicula("1", "El Padrino", "Francis Ford Coppola", 15.5));
-        listaPeliculas.add(new Pelicula("2", "Titanic", "James Cameron", 30.0));
-        listaPeliculas.add(new Pelicula("3", "Terminator", "James Cameron", 12.75));
-        listaPeliculas.add(new Pelicula("4", "Star Wars", "George Lucas", 5.75));
-        listaPeliculas.add(new Pelicula("5", "Avatar", "James Cameron", 3.99));
-    
-    }
+	public GestorPeliculas() {
+		listaPeliculas = new ArrayList<>();
 
-    public void agregarPelicula(Pelicula pelicula) {
-        listaPeliculas.add(pelicula);
-    }
+		listaPeliculas.add(new Pelicula("1", "El Padrino", "Francis Ford Coppola", 15.5));
+		listaPeliculas.add(new Pelicula("2", "Titanic", "James Cameron", 30.0));
+		listaPeliculas.add(new Pelicula("3", "Terminator", "James Cameron", 12.75));
+		listaPeliculas.add(new Pelicula("4", "Star Wars", "George Lucas", 5.75));
+		listaPeliculas.add(new Pelicula("5", "Avatar", "James Cameron", 3.99));
 
-    public Pelicula obtenerPeliculaPorID(String id) {
-        for (Pelicula pelicula : listaPeliculas) {
-            if (pelicula.getId().equalsIgnoreCase(id)) {
-                return pelicula;
-            }
-        }
-        return null; 
-    }
+	}
 
-    public Pelicula obtenerPeliculaPorTitulo(String titulo) {
-    	    	
-        for (Pelicula pelicula : listaPeliculas) {
-            if (pelicula.getTitulo().equalsIgnoreCase(titulo)) {
-                return pelicula;
-            }
-        }
-        return null;
-    }
+	public void agregarPelicula(Pelicula pelicula) {
+		listaPeliculas.add(pelicula);
+	}
 
-    public List<Pelicula> obtenerPeliculasPorDirector(String director) {
-        List<Pelicula> peliculasDirector = new ArrayList<>();
+	public Pelicula obtenerPeliculaPorID(String id) {
+		for (Pelicula pelicula : listaPeliculas) {
+			if (pelicula.getId().equalsIgnoreCase(id)) {
+				return pelicula;
+			}
+		}
+		return null;
+	}
 
-        for (Pelicula pelicula : listaPeliculas) {
-            if (pelicula.getDirector().equalsIgnoreCase(director)) {
-                peliculasDirector.add(pelicula);
-            }
-        }
+	public Pelicula obtenerPeliculaPorTitulo(String titulo) {
 
-        if (peliculasDirector.isEmpty()) {
-            return null;
-        } else {
-            return peliculasDirector;
-        }
-    }
+		for (Pelicula pelicula : listaPeliculas) {
+			if (pelicula.getTitulo().equalsIgnoreCase(titulo)) {
+				return pelicula;
+			}
+		}
+		return null;
+	}
 
+	public List<Pelicula> obtenerPeliculasPorDirector(String director) {
+		List<Pelicula> peliculasDirector = new ArrayList<>();
+
+		for (Pelicula pelicula : listaPeliculas) {
+			if (pelicula.getDirector().equalsIgnoreCase(director)) {
+				peliculasDirector.add(pelicula);
+			}
+		}
+
+		if (peliculasDirector.isEmpty()) {
+			return null;
+		} else {
+			return peliculasDirector;
+		}
+	}
 }

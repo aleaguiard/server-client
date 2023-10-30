@@ -1,0 +1,59 @@
+package servidor;
+
+import pelicula.GestorPeliculas;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.Socket;
+
+public class ClienteHandler implements Runnable {
+    private Socket socketAlCliente;
+    private GestorPeliculas gestorPeliculas;
+    private Thread hilo;
+
+    public ClienteHandler(Socket socketAlCliente) {
+        this.socketAlCliente = socketAlCliente;
+        hilo = new Thread (this);
+        hilo.start();
+    }
+
+    @Override
+    public void run() {
+    	System.out.println("Estableciendo comunicacion con " + hilo.getName());
+		PrintStream salida = null;
+		InputStreamReader entrada = null;
+		BufferedReader entradaBuffer = null;
+		
+        try {
+			salida = new PrintStream(socketAlCliente.getOutputStream());
+			entrada = new InputStreamReader(socketAlCliente.getInputStream());
+			entradaBuffer = new BufferedReader(entrada);
+			
+			String texto = "";
+			boolean continuar = true;
+			
+			//Procesaremos entradas hasta que el texto del cliente sea FIN
+			while (continuar) {
+				texto = entradaBuffer.readLine();
+				
+				if (texto.equalsIgnoreCase("FIN")) {
+					salida.println("OK");
+					System.out.println(hilo.getName() + " ha cerrado la comunicacion");
+					continuar = false;
+				}else {
+					System.out.println("continua");
+				}
+			}
+			
+			socketAlCliente.close();
+			
+		} catch (IOException e) {
+			System.err.println("Error de entrada/salida");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("Error");
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,98 @@
+package servidor;
+
+import pelicula.GestorPeliculas;
+import pelicula.Pelicula;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.List;
+
+public class ClienteHandler implements Runnable {
+    private Socket socketAlCliente;
+    private GestorPeliculas gestorPeliculas;
+    private Thread hilo;
+
+    public ClienteHandler(Socket socketAlCliente, GestorPeliculas gestorPeliculas) {
+        this.socketAlCliente = socketAlCliente;
+        this.gestorPeliculas = gestorPeliculas;
+        hilo = new Thread(this);
+        hilo.start();
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Estableciendo comunicación con " + hilo.getName());
+        PrintStream salida = null;
+        InputStreamReader entrada = null;
+        BufferedReader entradaBuffer = null;
+
+        try {
+            salida = new PrintStream(socketAlCliente.getOutputStream());
+            entrada = new InputStreamReader(socketAlCliente.getInputStream());
+            entradaBuffer = new BufferedReader(entrada);
+
+            String texto = "";
+            boolean continuar = true;
+
+            while (continuar) {
+                texto = entradaBuffer.readLine();
+
+                switch (texto) {
+                        case "1":
+                        	System.out.println("Búsqueda por ID");
+                            String id = entradaBuffer.readLine();
+                            Pelicula peliculaPorID = gestorPeliculas.obtenerPeliculaPorID(id);
+                            salida.println(peliculaPorID != null ? peliculaPorID.toString() : "Película no encontrada");
+                            salida.println("FIN");
+                            break;
+                        case "2":
+                        	System.out.println("Búsqueda por Título");
+
+                            String titulo = entradaBuffer.readLine();
+                            Pelicula peliculaPorTitulo = gestorPeliculas.obtenerPeliculaPorTitulo(titulo);
+                            salida.println(peliculaPorTitulo != null ? peliculaPorTitulo.toString() : "Película no encontrada");
+                            salida.println("FIN");
+                            break;
+                    	case "3":
+                    		System.out.println("Búsqueda por Director");
+                    	    String director = entradaBuffer.readLine();
+                    	    List<Pelicula> peliculasPorDirector = gestorPeliculas.obtenerPeliculasPorDirector(director);
+                    	    for (Pelicula pelicula : peliculasPorDirector) {
+                    	        salida.println(pelicula.toString());
+                    	    }
+                    	    salida.println("FIN");
+                    	    break;
+                 
+                        case "4":
+                        	System.out.println("Añadir película");
+
+                            String datosPelicula = entradaBuffer.readLine();
+                            salida.println("Película agregada con éxito");
+                            salida.println("FIN");
+                            break;
+                        case "5":
+                        	System.out.println("Cerrada la comunicación con " + hilo.getName());
+                            salida.println("Saliendo de la aplicación...");
+                            continuar = false;
+                            salida.println("FIN");
+                            break;
+                        default:
+                            System.out.println("Opción no válida.");
+                            salida.println("FIN");
+                            break;
+                    }
+                }
+
+            socketAlCliente.close();
+        } catch (IOException e) {
+            System.err.println("Error de entrada/salida");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Error");
+            e.printStackTrace();
+        }
+    }
+}
