@@ -72,23 +72,32 @@ public class SocketClienteHilo {
 
 				default:
 					System.out.println("Opción no válida.");
-					continue;
+					break;
 				}
+
 
 				if (!opcion.equals("5")) {
-					PrintStream salidaServidor2 = new PrintStream(socketAlServidor.getOutputStream());
-					salidaServidor2.println(respuesta);
-
-					System.out.println("CLIENTE: Esperando al resultado del servidor...");
-					String resultado = entradaBuffer.readLine();
-
-					System.out.println("CLIENTE: El resultado de la búsqueda es:");
-
-					while (!resultado.equals("FIN")) {
-						System.out.println(resultado);
-						resultado = entradaBuffer.readLine();
-					}
+				    PrintStream salidaServidor2 = new PrintStream(socketAlServidor.getOutputStream());
+				    salidaServidor2.println(respuesta);
+				    
+				    System.out.println("CLIENTE: Esperando al resultado del servidor...");
+				    String resultado = entradaBuffer.readLine();
+				    
+				    if (resultado.equals("FIN")) {
+				        System.out.println("CLIENTE: El resultado de la búsqueda ha terminado.");
+				    } else {
+				        System.out.println("CLIENTE: El resultado de la búsqueda es:");
+				        while (!resultado.equals("FIN")) {
+				            System.out.println(resultado);
+				            resultado = entradaBuffer.readLine();
+				        }
+				    }
 				}
+				
+				if (!opcion.equals("3")) {
+		            Menu.mostrarMenu(System.out);
+		        }
+
 
 			} while (continuar);
 

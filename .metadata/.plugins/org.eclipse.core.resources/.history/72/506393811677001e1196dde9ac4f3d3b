@@ -113,7 +113,6 @@ public class ClienteHandler implements Runnable {
 									"Formato de datos incorrecto. Debe ingresar id, titulo, director y precio separados por comas.");
 						}
 					}
-					salida.println("FIN");
 					break;
 
 				case "5":
