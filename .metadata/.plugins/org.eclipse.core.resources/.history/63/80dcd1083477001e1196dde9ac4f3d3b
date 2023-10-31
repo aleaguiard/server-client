@@ -102,7 +102,7 @@ public class ClienteHandler implements Runnable {
 
 								gestorPeliculas.agregarPelicula(new Pelicula(id1, titulo1, director1, precio1));
 								salida.println(
-										"Película agregada con éxito: " + gestorPeliculas.obtenerPeliculaPorID(id1));
+										"Película agregada con éxito" + gestorPeliculas.obtenerPeliculaPorID(id1));
 								System.out.println(this.gestorPeliculas.obtenerPeliculaPorID(id1) + " Añadida por "
 										+ hilo.getName());
 

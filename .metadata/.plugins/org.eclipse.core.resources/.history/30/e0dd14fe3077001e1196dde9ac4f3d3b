@@ -26,7 +26,7 @@ public class ClienteHandler implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("SERVIDOR: Estableciendo comunicación con " + hilo.getName());
+		System.out.println("Estableciendo comunicación con " + hilo.getName());
 		PrintStream salida = null;
 		InputStreamReader entrada = null;
 		BufferedReader entradaBuffer = null;
@@ -44,7 +44,7 @@ public class ClienteHandler implements Runnable {
 
 				switch (texto) {
 				case "1":
-					System.out.println("SERVIDOR: " + hilo.getName() + " Búsqueda por ID");
+					System.out.println(hilo.getName() + " Búsqueda por ID");
 					String id = entradaBuffer.readLine();
 					Pelicula peliculaPorID = gestorPeliculas.obtenerPeliculaPorID(id);
 					salida.println(peliculaPorID != null ? peliculaPorID.toString() : "Película no encontrada");
@@ -52,7 +52,7 @@ public class ClienteHandler implements Runnable {
 					break;
 
 				case "2":
-					System.out.println("SERVIDOR: " + hilo.getName() + " Búsqueda por Título");
+					System.out.println(hilo.getName() + " Búsqueda por Título");
 
 					String titulo = entradaBuffer.readLine();
 					Pelicula peliculaPorTitulo = gestorPeliculas.obtenerPeliculaPorTitulo(titulo);
@@ -61,22 +61,18 @@ public class ClienteHandler implements Runnable {
 					break;
 
 				case "3":
-					System.out.println("SERVIDOR: " + hilo.getName() + " Búsqueda por Director");
+					System.out.println(hilo.getName() + " Búsqueda por Director");
 					String director = entradaBuffer.readLine();
 					List<Pelicula> peliculasPorDirector = gestorPeliculas.obtenerPeliculasPorDirector(director);
 
-					if (peliculasPorDirector.isEmpty()) {
-						salida.println("Director no encontrado");
-					} else {
-						for (Pelicula pelicula : peliculasPorDirector) {
-							salida.println(pelicula.toString());
-						}
+					for (Pelicula pelicula : peliculasPorDirector) {
+						salida.println(pelicula.toString());
 					}
 					salida.println("FIN");
 					break;
 
 				case "4":
-					System.out.println("SERVIDOR: " + hilo.getName() + " Añadir película");
+					System.out.println(hilo.getName() + " Añadir película");
 
 					synchronized (lock) {
 						String datosPelicula = entradaBuffer.readLine();
@@ -101,8 +97,7 @@ public class ClienteHandler implements Runnable {
 								agregandoPelicula = true;
 
 								gestorPeliculas.agregarPelicula(new Pelicula(id1, titulo1, director1, precio1));
-								salida.println(
-										"Película agregada con éxito: " + gestorPeliculas.obtenerPeliculaPorID(id1));
+								salida.println("Película agregada con éxito" + gestorPeliculas.obtenerPeliculaPorID(id1));
 								System.out.println(this.gestorPeliculas.obtenerPeliculaPorID(id1) + " Añadida por "
 										+ hilo.getName());
 
@@ -122,13 +117,13 @@ public class ClienteHandler implements Runnable {
 					break;
 
 				case "5":
-					System.out.println("SERVIDOR: Cerrada la comunicación con " + hilo.getName());
+					System.out.println("Cerrada la comunicación con " + hilo.getName());
 					salida.println("Saliendo de la aplicación...");
 					continuar = false;
 					break;
 
 				default:
-					System.out.println("SERVIDOR: Opción no válida." + hilo.getName());
+					System.out.println("Opción no válida." + hilo.getName());
 					break;
 				}
 			}

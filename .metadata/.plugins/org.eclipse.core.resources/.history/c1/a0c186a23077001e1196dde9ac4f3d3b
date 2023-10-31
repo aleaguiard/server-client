@@ -29,6 +29,9 @@ public class SocketClienteHilo {
 			InputStreamReader entrada = new InputStreamReader(socketAlServidor.getInputStream());
 			BufferedReader entradaBuffer = new BufferedReader(entrada);
 
+			PrintStream salida = new PrintStream(socketAlServidor.getOutputStream());
+
+			String texto = "";
 			boolean continuar = true;
 
 			do {

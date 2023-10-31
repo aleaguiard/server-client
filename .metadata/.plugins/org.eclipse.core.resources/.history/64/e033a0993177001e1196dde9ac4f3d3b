@@ -5,7 +5,7 @@ import java.util.List;
 
 public class GestorPeliculas {
 
-	private static List<Pelicula> listaPeliculas;
+	private List<Pelicula> listaPeliculas;
 
 	public GestorPeliculas() {
 		listaPeliculas = new ArrayList<>();
@@ -51,7 +51,7 @@ public class GestorPeliculas {
 		}
 
 		if (peliculasDirector.isEmpty()) {
-			return new ArrayList<>();
+			return null;
 		} else {
 			return peliculasDirector;
 		}

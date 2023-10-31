@@ -51,9 +51,9 @@ public class GestorPeliculas {
 		}
 
 		if (peliculasDirector.isEmpty()) {
-			return new ArrayList<>();
+			 return new ArrayList<>();
 		} else {
-			return peliculasDirector;
+		    return peliculasDirector;
 		}
 	}
 }
