@@ -6,6 +6,7 @@ public class MainPruebaMetodos {
 
 		GestorPeliculas gestor = new GestorPeliculas();
 
+		// Comprobación de los métodos
 		System.out.println(gestor.obtenerPeliculasPorDirector("JAmes CamEron"));
 		System.out.println(gestor.obtenerPeliculaPorID("1"));
 		System.out.println(gestor.obtenerPeliculasPorDirector("George Lucas"));

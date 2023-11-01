@@ -87,31 +87,36 @@ public class ClienteHandler implements Runnable {
 							String titulo1 = datos[1].trim();
 							String director1 = datos[2].trim();
 
-							try {
-								double precio1 = Double.parseDouble(datos[3].trim());
+							// Método para comprobar que la película no ha sido insertada previamente mediante el ID
+							if (gestorPeliculas.existePeliculaConID(id1)) {
+								salida.println("La película con este ID ya ha sido insertada previamente.");
+							} else {
+								try {
+									double precio1 = Double.parseDouble(datos[3].trim());
 
-								while (agregandoPelicula) {
-									try {
-										lock.wait();
-									} catch (InterruptedException e) {
-										e.printStackTrace();
+									while (agregandoPelicula) {
+										try {
+											lock.wait();
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
 									}
+
+									agregandoPelicula = true;
+
+									gestorPeliculas.agregarPelicula(new Pelicula(id1, titulo1, director1, precio1));
+									salida.println(
+											"Película agregada con éxito: " + gestorPeliculas.obtenerPeliculaPorID(id1));
+									System.out.println(this.gestorPeliculas.obtenerPeliculaPorID(id1) + " Añadida por "
+											+ hilo.getName());
+
+									agregandoPelicula = false;
+
+									lock.notifyAll();
+								} catch (NumberFormatException e) {
+									salida.println(
+											"Error en el formato del precio. Asegúrate de que el precio sea un número válido.");
 								}
-
-								agregandoPelicula = true;
-
-								gestorPeliculas.agregarPelicula(new Pelicula(id1, titulo1, director1, precio1));
-								salida.println(
-										"Película agregada con éxito: " + gestorPeliculas.obtenerPeliculaPorID(id1));
-								System.out.println(this.gestorPeliculas.obtenerPeliculaPorID(id1) + " Añadida por "
-										+ hilo.getName());
-
-								agregandoPelicula = false;
-
-								lock.notifyAll();
-							} catch (NumberFormatException e) {
-								salida.println(
-										"Error en el formato del precio. Asegúrate de que el precio sea un número válido.");
 							}
 						} else {
 							salida.println(
@@ -143,3 +148,4 @@ public class ClienteHandler implements Runnable {
 		}
 	}
 }
+
