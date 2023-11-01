@@ -19,7 +19,7 @@ public class GestorPeliculas {
     }
 
     // Método para agregar una película a la lista
-    public void agregarPelicula(Pelicula pelicula) {
+    public synchronized void agregarPelicula(Pelicula pelicula) {
         listaPeliculas.add(pelicula);
     }
 
